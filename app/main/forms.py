@@ -17,14 +17,11 @@ class AbstractForm(Form):
 	title = StringField('Abstract Title: ')
 	authors = TextAreaField('List of Authors: ')
 	content = TextAreaField('Content: ')
-	presen_type = SelectField('Presentation Type:', choices=["poster", "oral"])
+	#presen_type = SelectField('Presentation Type:', choices=["poster", "oral"])
 	submit = SubmitField('Submit')
+
+
 """
-class EditProfileForm(Form):
-	name = StringField('Real name', validators=[Length(0,64)])
-	location = StringField('Location', validators=[Length(0,64)])
-	about_me = TextAreaField('About me')
-	submit = SubmitField('Submit')
 
 class EditProfileAdminForm(Form):
 	email = StringField('Email', validators=[Required(), Length(1,64),
