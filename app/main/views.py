@@ -31,12 +31,12 @@ def index():
 	"""
 	studentForm = StudentForm()
 	abstractForm = AbstractForm()
-	#user = Student.query.filter_by(email).first()
+	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
 	
 
-
+#NOT SURE WHAT'S GOING ON HERE#
 	return render_template('index.html',
-		form = AbstractForm(current_user.data) #, name = session.get('name'),
+		abstract = abstract #, name = session.get('name'),
 		#known = session.get('known', False),
 		#members=somelist, current_time=datetime.utcnow()
 		)

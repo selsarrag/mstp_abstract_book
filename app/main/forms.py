@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectMultipleField
+from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
 from ..models import Student, Abstract
@@ -17,7 +17,7 @@ class AbstractForm(Form):
 	title = StringField('Abstract Title: ')
 	authors = TextAreaField('List of Authors: ')
 	content = TextAreaField('Content: ')
-	presen_type = SelectMultipleField('Presentation Type:', choices=["poster", "oral"])
+	presen_type = SelectField('Presentation Type:', choices=["poster", "oral"])
 	submit = SubmitField('Submit')
 """
 class EditProfileForm(Form):
