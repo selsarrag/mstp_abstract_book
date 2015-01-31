@@ -31,7 +31,7 @@ def edit_abstract():
 		abstract.title = form.title.data
 		abstract.authors = form.authors.data
 		abstract.content = form.content.data
-		abstract.eventname = form.eventname.data
+		abstract.eventname = "2015 Second Look"
 		abstract.presen_type = form.presen_type.data
 		db.session.add(abstract)
 		flash('Your abstract has been updated!')
@@ -39,7 +39,7 @@ def edit_abstract():
 	form.title.data = abstract.title
 	form.authors.data = abstract.authors
 	form.content.data = abstract.content
-	form.eventname.data = abstract.eventname
+	#form.eventname.data = abstract.eventname
 	form.presen_type.data = abstract.presen_type
 	return render_template('edit_abstract.html', form=form)
 """

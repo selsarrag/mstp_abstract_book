@@ -16,7 +16,7 @@ def login():
 			return redirect(url_for('main.index'))
 			#return redirect(request.args.get('next') or url_for('main.index'))
 		flash('Invalid user email.')
-	return render_template('/auth/login.html', form=form)
+	return render_template('/auth/login.html', form=form, current_user=current_user)
 
 @auth.route('/logout')
 @login_required

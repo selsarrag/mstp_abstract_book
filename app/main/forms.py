@@ -15,7 +15,7 @@ class StudentForm(Form):
 
 class AbstractForm(Form):
 	title = StringField('Abstract Title: ')
-	eventname = HiddenField('2015 Second Look')
+	eventname = HiddenField('Event: 2015 Second Look')
 	authors = TextAreaField('List of Authors: ')
 	content = TextAreaField('Content: ')
 	presen_type = SelectField('Presentation Type:', choices=[('','Select from below'),('poster','poster'), ('oral', 'oral')])
