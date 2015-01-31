@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField, HiddenField
+from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField, HiddenField, IntegerField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
-from ..models import Student, Abstract
+from ..models import Student, Abstract, Publication, Award
 
 class StudentForm(Form):
 	name = StringField('Full Name [First MI Last]: ')
@@ -10,7 +10,6 @@ class StudentForm(Form):
 	grade = StringField('Grade (ex. MS2, GS2 etc.): ')
 	advisor = StringField('Name of your advisor [First MI Last]: ')
 	department = StringField('Department: ')
-
 	submit = SubmitField('Submit')
 
 class AbstractForm(Form):
@@ -21,7 +20,19 @@ class AbstractForm(Form):
 	presen_type = SelectField('Presentation Type:', choices=[('','Select from below'),('poster','poster'), ('oral', 'oral')])
 	submit = SubmitField('Submit')
 
-
+class PublicationForm(Form):
+	title = StringField('Publication Title: ')
+	authors = TextAreaField('List of Authors: ')
+	journal = StringField('Journal name: ')
+	pub_year = IntegerField('Publication year: ')
+	doi = StringField('DOI: ')
+	submit = SubmitField('Submit')
+	
+class AwardForm(Form):
+	award_title = StringField('Title of award: ')
+	date = StringField('Date awarded: ')
+	institution = StringField('Which institution/organization did you receive the award from?: ')
+	submit = SubmitField('Submit')
 """
 
 class EditProfileAdminForm(Form):

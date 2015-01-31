@@ -2,9 +2,9 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, current_app, abort, flash
 from flask.ext.login import login_required, current_user
 from . import main
-from .forms import StudentForm, AbstractForm
+from .forms import StudentForm, AbstractForm, PublicationForm, AwardForm
 from .. import db
-from ..models import Student, Abstract
+from ..models import Student, Abstract, Publication, Award
 #from ..email import send_email
 #from ..decorators import admin_required, permission_required
 
@@ -13,13 +13,14 @@ from ..models import Student, Abstract
 def index():
 
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
-	
+	publication = Publication.query.filter_by(student_id = current_user.id).first()
+	award = Award.query.filter_by(student_id = current_user.id).first()
 
-#NOT SURE WHAT'S GOING ON HERE#
 	return render_template('index.html',
-		abstract = abstract #, name = session.get('name'),
+		abstract = abstract, publication = publication, award = award 
+		#, name = session.get('name'),
 		#known = session.get('known', False),
-		#members=somelist, current_time=datetime.utcnow()
+		#current_time=datetime.utcnow()
 		)
 
 @main.route('/edit_abstract', methods=['GET', 'POST'])
@@ -49,56 +50,55 @@ def edit_abstract():
 	#form.eventname.data = abstract.eventname
 	form.presen_type.data = abstract.presen_type
 	return render_template('edit_abstract.html', form=form)
-"""
-@main.route('/admin')
+
+@main.route('/edit_publications', methods=['GET', 'POST'])
 @login_required
-@admin_required
-def for_admins_only():
-	return "For administrators!"
+def edit_publications():
+	if Publication.query.filter_by(student_id = current_user.id).first() is None:
+		new_publication = Publication(student_id=current_user.id)
+		db.session.add(new_publication)
+		db.session.commit()
+	publication = Publication.query.filter_by(student_id = current_user.id).first()
+	
+	form = PublicationForm()
 
-@main.route('/moderator')
-@login_required
-@permission_required(Permission.MODERATE_COMMENTS)
-def for_moderators_only():
-	return "For comment moderators!"
-
-@main.route('/user/<username>')
-def user(username):
-	user = User.query.filter_by(username=username).first()
-	if user is None:
-		abort(404)
-	return render_template('user.html', user=user)
-
-
-
-
-@main.route('/edit_profile/<int:id>', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def edit_profile_admin(id):
-	user = User.query.get_or_404(id)
-	form = EditProfileAdminForm(user=user)
 	if form.validate_on_submit():
-		user.email = form.email.data
-		user.username = form.username.data
-		user.confirmed = form.confirmed.data
-		user.role = Role.query.get(form.role.data)
-		user.name = form.name.data
-		user.location = form.location.data
-		user.about_me = form.about_me.data
-		db.session.add(user)
-		flash('The profile has been updated in admin mode.')
-		return redirect(url_for('.user', username=user.username))
-	form.email.data = user.email
-	form.username.data = user.username
-	form.confirmed.data = user.confirmed
-	form.role.data = user.role_id
-	form.name.data = user.name
-	form.location.data = user.location
-	form.about_me.data = user.about_me
-	return render_template('edit_profile.html', form=form, user=user)
-"""
+		publication.title = form.title.data
+		publication.authors = form.authors.data
+		publication.doi = form.doi.data
+		publication.journal = form.journal.data
+		publication.pub_year = form.pub_year.data
+		db.session.add(publication)
+		db.session.commit()
+		flash('Your publication list has been updated!')
+		return redirect(url_for('.index', publication=publication))
+	form.title.data = publication.title
+	form.authors.data = publication.authors
+	form.doi.data = publication.doi
+	form.journal.data = publication.journal
+	form.pub_year.data = publication.pub_year
+	return render_template('edit_publications.html', form=form)
 
+@main.route('/edit_awards', methods=['GET', 'POST'])
+@login_required
+def edit_awards():
+	if Award.query.filter_by(student_id = current_user.id).first() is None:
+		new_award = Award(student_id=current_user.id)
+		db.session.add(new_award)
+		db.session.commit()
+	award = Award.query.filter_by(student_id = current_user.id).first()
+	
+	form = AwardForm()
 
-
-
+	if form.validate_on_submit():
+		award.award_title = form.award_title.data
+		award.date = form.date.data
+		award.institution = form.institution.data
+		db.session.add(award)
+		db.session.commit()
+		flash('Your award list has been updated!')
+		return redirect(url_for('.index', award=award))
+	form.award_title.data = award.award_title
+	form.date.data = award.date
+	form.institution.data = award.institution
+	return render_template('edit_awards.html', form=form)

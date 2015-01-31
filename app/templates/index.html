@@ -14,7 +14,18 @@
 	<p>List of Authors: {{ abstract.authors }}</p>
 	<p>Content: {{ abstract.content }}</p>
 	<p>Presentation Type: {{ abstract.presen_type }}</p>
-	
+
+	<h3>Publications  <a class="btn btn-default" href="{{ url_for('.edit_publications') }}"> Edit Publication Info</a></h3>
+	<p>Title: {{ publication.title }}</p>
+	<p>List of Authors: {{ publication.authors }}</p>
+	<p>Journal: {{ publication.journal }}</p>
+	<p>Year: {{ publication.pub_year }}</p>
+	<p>DOI: {{ publication.doi }}</p>
+
+	<h3>Awards  <a class="btn btn-default" href="{{ url_for('.edit_awards') }}"> Edit Award Info</a></h3>
+	<p>Award Title: {{ award.award_title }}</p>
+	<p>List of Authors: {{ award.date }}</p>
+	<p>Journal: {{ award.institution }}</p>
 	</div>
 
 {% endblock %}
