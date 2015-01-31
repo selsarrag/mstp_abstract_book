@@ -25,8 +25,14 @@ def index():
 @main.route('/edit_abstract', methods=['GET', 'POST'])
 @login_required
 def edit_abstract():
+	if Abstract.query.filter_by(student_id = current_user.id).first() is None:
+		new_abstract = Abstract(student_id=current_user.id)
+		db.session.add(new_abstract)
+		db.session.commit()
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
+	
 	form = AbstractForm()
+
 	if form.validate_on_submit():
 		abstract.title = form.title.data
 		abstract.authors = form.authors.data
@@ -34,6 +40,7 @@ def edit_abstract():
 		abstract.eventname = "2015 Second Look"
 		abstract.presen_type = form.presen_type.data
 		db.session.add(abstract)
+		db.session.commit()
 		flash('Your abstract has been updated!')
 		return redirect(url_for('.index', abstract=abstract))
 	form.title.data = abstract.title
