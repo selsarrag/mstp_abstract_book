@@ -11,26 +11,7 @@ from ..models import Student, Abstract
 @main.route('/', methods=['GET', 'POST']) 
 @login_required
 def index():
-	"""
-	name = None
-	form = NameForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(username=form.name.data).first()
-		if user is None:
-			user = User(username = form.name.data)
-			db.session.add(user)
-			session['known'] = False
-			if current_app.config['FLASKY_ADMIN']:
-				send_email(current_app.config['FLASKY_ADMIN'], 'New User',
-					'mail/new_user', user=user)
-		else:
-			session['known'] = True
-		session['name'] = form.name.data
-		form.name.data = ''
-		return redirect(url_for('.index'))
-	"""
-	#studentForm = StudentForm()
-	#abstractForm = AbstractForm()
+
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
 	
 
@@ -52,8 +33,7 @@ def edit_abstract():
 		abstract.content = form.content.data
 		db.session.add(abstract)
 		flash('Your abstract has been updated!')
-		return redirect(url_for('./', abstract=abstract))
-			#title=abstract.title, authors=abstract.authors, content=abstract.content))
+		return redirect(url_for('.index', abstract=abstract))
 	form.title.data = abstract.title
 	form.authors.data = abstract.authors
 	form.content.data = abstract.content

@@ -6,34 +6,8 @@
 	{{ super() }}
 {% endblock %}
 {% block page_content %}
-	{#<div class="page-header">
-		<h2>Hello,
-		{% if current_user.is_authenticated() %}
-			{{ current_user.username }}
-		{% else %}
-			Stranger
-		{% endif %}!</h2>
-		<h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}</h1>
-		{% if not known %}
-		<p>Pleased to meet you!</p>
-		{% else %}
-		<p>Happy to see you again!</p>
-		{% endif %}
-		
-	</div>
-	{{ wtf.quick_form(form) }}
-	<h1>Hello World!</h1>
-	<p>The local date and time is {{ moment(current_time).format('LLL') }}</p>
-	<p>That was {{ moment(current_time).fromNow(refresh=True) }}</p>
-	<h2>My name is Maho</h2>
-	<p>I am a member of the Walker family.</br>Member names are...<p>
-	<ul>
-	{% for x in members %}
-		<li>{{ x }}</li>
-	{% endfor %}
-	</ul>
-	#}
-	<h2>test text for overview</h2>
+
+	<h2>Overview</h2>
 	<div class="page header">
 	<h3>Abstract</h3>
 	<p>Title: {{ abstract.title }}</p>
