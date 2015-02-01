@@ -11,3 +11,8 @@
 	{{ wtf.quick_form(form) }}
 </div>
 {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'abstract.css') }}" />
+{{ super() }}
+{% endblock %}

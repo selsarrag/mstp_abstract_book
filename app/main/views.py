@@ -27,14 +27,28 @@ def index():
 @main.route('/edit_abstract', methods=['GET', 'POST'])
 @login_required
 def edit_abstract():
+	
 	if Abstract.query.filter_by(student_id = current_user.id).first() is None:
 		new_abstract = Abstract(student_id=current_user.id)
-		db.session.add(new_abstract)
-		db.session.commit()
-	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
+		form = AbstractForm()
+		if form.validate_on_submit():
+			new_abstract.title = form.title.data
+			new_abstract.authors = form.authors.data
+			new_abstract.content = form.content.data
+			new_abstract.eventname = "2015 Second Look"
+			new_abstract.presen_type = form.presen_type.data
+			db.session.add(new_abstract)
+			db.session.commit()
+			flash('Your abstract has been added!')
+			return redirect(url_for('.index', abstract=new_abstract))
+		form.title.data = new_abstract.title
+		form.authors.data = new_abstract.authors
+		form.content.data = new_abstract.content
+		form.presen_type.data = new_abstract.presen_type
+		return render_template('edit_abstract.html', form=form)
 	
+	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
 	form = AbstractForm()
-
 	if form.validate_on_submit():
 		abstract.title = form.title.data
 		abstract.authors = form.authors.data
@@ -48,7 +62,6 @@ def edit_abstract():
 	form.title.data = abstract.title
 	form.authors.data = abstract.authors
 	form.content.data = abstract.content
-	#form.eventname.data = abstract.eventname
 	form.presen_type.data = abstract.presen_type
 	return render_template('edit_abstract.html', form=form)
 
