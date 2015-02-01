@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, current_app, abort, flash
 from flask.ext.login import login_required, current_user
 from . import main
-from .forms import StudentForm, AbstractForm, PublicationForm, AwardForm
+from .forms import StudentForm, AbstractForm, PublicationForm, AwardForm #, PublicationListForm
 from .. import db
 from ..models import Student, Abstract, Publication, Award
 #from ..email import send_email
@@ -13,11 +13,11 @@ from ..models import Student, Abstract, Publication, Award
 def index():
 
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
-	publication = Publication.query.filter_by(student_id = current_user.id).first()
+	publications = Publication.query.filter_by(student_id = current_user.id).all()
 	award = Award.query.filter_by(student_id = current_user.id).first()
 
 	return render_template('index.html',
-		abstract = abstract, publication = publication, award = award 
+		abstract = abstract, publications = publications, award = award 
 		#, name = session.get('name'),
 		#known = session.get('known', False),
 		#current_time=datetime.utcnow()
@@ -51,17 +51,36 @@ def edit_abstract():
 	form.presen_type.data = abstract.presen_type
 	return render_template('edit_abstract.html', form=form)
 
-@main.route('/edit_publications', methods=['GET', 'POST'])
+@main.route('/add_publication', methods=['GET', 'POST'])
 @login_required
-def edit_publications():
-	if Publication.query.filter_by(student_id = current_user.id).first() is None:
-		new_publication = Publication(student_id=current_user.id)
+def add_publication():
+	new_publication = Publication(student_id=current_user.id)	
+	form = PublicationForm()
+	if form.validate_on_submit():
+		new_publication.title = form.title.data
+		new_publication.authors = form.authors.data
+		new_publication.doi = form.doi.data
+		new_publication.journal = form.journal.data
+		new_publication.pub_year = form.pub_year.data
 		db.session.add(new_publication)
 		db.session.commit()
-	publication = Publication.query.filter_by(student_id = current_user.id).first()
+		flash('Your publication has been added!')
+		return redirect(url_for('.index', publication=new_publication))
+	form.title.data = new_publication.title
+	form.authors.data = new_publication.authors
+	form.doi.data = new_publication.doi
+	form.journal.data = new_publication.journal
+	form.pub_year.data = new_publication.pub_year
 	
-	form = PublicationForm()
+	return render_template('add_publication.html', form=form)
 
+
+@main.route('/edit_publications/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_publications(id):
+	publication = Publication.query.filter_by(student_id = current_user.id).get_or_404(id)
+	form = PublicationForm()
+	
 	if form.validate_on_submit():
 		publication.title = form.title.data
 		publication.authors = form.authors.data
@@ -70,13 +89,14 @@ def edit_publications():
 		publication.pub_year = form.pub_year.data
 		db.session.add(publication)
 		db.session.commit()
-		flash('Your publication list has been updated!')
+		flash('Your publication has been updated!')
 		return redirect(url_for('.index', publication=publication))
 	form.title.data = publication.title
 	form.authors.data = publication.authors
 	form.doi.data = publication.doi
 	form.journal.data = publication.journal
 	form.pub_year.data = publication.pub_year
+	
 	return render_template('edit_publications.html', form=form)
 
 @main.route('/edit_awards', methods=['GET', 'POST'])

@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField, HiddenField, IntegerField
+from wtforms import StringField, SubmitField, TextAreaField, SelectField, HiddenField, IntegerField, FormField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
 from ..models import Student, Abstract, Publication, Award
@@ -27,7 +27,11 @@ class PublicationForm(Form):
 	pub_year = IntegerField('Publication year: ')
 	doi = StringField('DOI: ')
 	submit = SubmitField('Submit')
-	
+
+"""
+class PublicationListForm(Form):
+	pub1 = FormField(PublicationForm)
+"""
 class AwardForm(Form):
 	award_title = StringField('Title of award: ')
 	date = StringField('Date awarded: ')
