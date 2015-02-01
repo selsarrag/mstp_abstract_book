@@ -23,6 +23,7 @@ def index():
 		#current_time=datetime.utcnow()
 		)
 
+
 @main.route('/edit_abstract', methods=['GET', 'POST'])
 @login_required
 def edit_abstract():
@@ -99,6 +100,15 @@ def edit_publications(id):
 		return render_template('edit_publications.html', form=form)
 	return render_template('404.html')
 
+@main.route('/delete_pub/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_pub(id):
+	publication = Publication.query.get_or_404(id)
+	db.session.delete(publication)
+	db.session.commit
+	flash('Your selected publication has been deleted!')
+	return redirect(url_for('.index', publication=publication))
+
 @main.route('/add_award', methods=['GET', 'POST'])
 @login_required
 def add_award():
@@ -136,3 +146,12 @@ def edit_awards(id):
 		form.institution.data = award.institution
 		return render_template('edit_awards.html', form=form)
 	return render_template('404.html')
+
+@main.route('/delete_award/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_award(id):
+	award = Award.query.get_or_404(id)
+	db.session.delete(award)
+	db.session.commit
+	flash('Your selected award has been deleted!')
+	return redirect(url_for('.index', award=award))
