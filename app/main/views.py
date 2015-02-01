@@ -14,10 +14,10 @@ def index():
 
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
 	publications = Publication.query.filter_by(student_id = current_user.id).all()
-	award = Award.query.filter_by(student_id = current_user.id).first()
+	awards = Award.query.filter_by(student_id = current_user.id).all()
 
 	return render_template('index.html',
-		abstract = abstract, publications = publications, award = award 
+		abstract = abstract, publications = publications, awards = awards 
 		#, name = session.get('name'),
 		#known = session.get('known', False),
 		#current_time=datetime.utcnow()
@@ -99,15 +99,32 @@ def edit_publications(id):
 	
 	return render_template('edit_publications.html', form=form)
 
-@main.route('/edit_awards', methods=['GET', 'POST'])
+@main.route('/add_award', methods=['GET', 'POST'])
 @login_required
-def edit_awards():
+def add_award():
+	new_award = Award(student_id=current_user.id)	
+	form = AwardForm()
+	if form.validate_on_submit():
+		new_award.award_title = form.award_title.data
+		new_award.date = form.date.data
+		new_award.institution = form.institution.data
+		db.session.add(new_award)
+		db.session.commit()
+		flash('Your award has been added!')
+		return redirect(url_for('.index', award=new_award))
+	form.award_title.data = new_award.award_title
+	form.date.data = new_award.date
+	form.institution.data = new_award.institution
+	return render_template('add_award.html', form=form)
+
+@main.route('/edit_awards/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_awards(id):
 	if Award.query.filter_by(student_id = current_user.id).first() is None:
 		new_award = Award(student_id=current_user.id)
 		db.session.add(new_award)
 		db.session.commit()
 	award = Award.query.filter_by(student_id = current_user.id).first()
-	
 	form = AwardForm()
 
 	if form.validate_on_submit():

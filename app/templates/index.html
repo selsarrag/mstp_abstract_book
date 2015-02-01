@@ -17,17 +17,19 @@
 
 	<h3>Publications  <a class="btn btn-default" href="{{ url_for('.add_publication') }}"> Add Publication</a></h3>
 	{% for publication in publications %}
-	<p>Title: {{ publication.title }} <a href="{{ url_for('.edit_publications', id=5) }}">edit</a></p>
-	<p>List of Authors: {{ publication.authors }}</p>
-	<p>Journal: {{ publication.journal }}</p>
-	<p>Year: {{ publication.pub_year }}</p>
-	<p>DOI: {{ publication.doi }}</p>
+		<p>Title: {{ publication.title }} <a href="{{ url_for('.edit_publications', id=5) }}">edit</a></p>
+		<p>List of Authors: {{ publication.authors }}</p>
+		<p>Journal: {{ publication.journal }}</p>
+		<p>Year: {{ publication.pub_year }}</p>
+		<p>DOI: {{ publication.doi }}</p>
 	{% endfor %}
 
-	<h3>Awards  <a class="btn btn-default" href="{{ url_for('.edit_awards') }}"> Edit Award Info</a></h3>
-	<p>Award Title: {{ award.award_title }}</p>
-	<p>List of Authors: {{ award.date }}</p>
-	<p>Journal: {{ award.institution }}</p>
+	<h3>Awards  <a class="btn btn-default" href="{{ url_for('.add_award') }}"> Add Award</a></h3>
+	{% for award in awards %}
+		<p>Award Title: {{ award.award_title }} <a href="{{ url_for('.edit_awards', id=5) }}">edit</a></p>
+		<p>Date Received: {{ award.date }}</p>
+		<p>Journal: {{ award.institution }}</p>
+	{% endfor %}
 	</div>
 
 {% endblock %}
