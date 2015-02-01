@@ -78,26 +78,26 @@ def add_publication():
 @main.route('/edit_publications/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_publications(id):
-	publication = Publication.query.filter_by(student_id = current_user.id).get_or_404(id)
+	publication = Publication.query.get_or_404(id)
 	form = PublicationForm()
-	
-	if form.validate_on_submit():
-		publication.title = form.title.data
-		publication.authors = form.authors.data
-		publication.doi = form.doi.data
-		publication.journal = form.journal.data
-		publication.pub_year = form.pub_year.data
-		db.session.add(publication)
-		db.session.commit()
-		flash('Your publication has been updated!')
-		return redirect(url_for('.index', publication=publication))
-	form.title.data = publication.title
-	form.authors.data = publication.authors
-	form.doi.data = publication.doi
-	form.journal.data = publication.journal
-	form.pub_year.data = publication.pub_year
-	
-	return render_template('edit_publications.html', form=form)
+	if publication.student_id == current_user.id:
+		if form.validate_on_submit():
+			publication.title = form.title.data
+			publication.authors = form.authors.data
+			publication.doi = form.doi.data
+			publication.journal = form.journal.data
+			publication.pub_year = form.pub_year.data
+			db.session.add(publication)
+			db.session.commit()
+			flash('Your publication has been updated!')
+			return redirect(url_for('.index', publication=publication))
+		form.title.data = publication.title
+		form.authors.data = publication.authors
+		form.doi.data = publication.doi
+		form.journal.data = publication.journal
+		form.pub_year.data = publication.pub_year
+		return render_template('edit_publications.html', form=form)
+	return render_template('404.html')
 
 @main.route('/add_award', methods=['GET', 'POST'])
 @login_required
@@ -120,22 +120,19 @@ def add_award():
 @main.route('/edit_awards/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_awards(id):
-	if Award.query.filter_by(student_id = current_user.id).first() is None:
-		new_award = Award(student_id=current_user.id)
-		db.session.add(new_award)
-		db.session.commit()
-	award = Award.query.filter_by(student_id = current_user.id).first()
+	award = Award.query.get_or_404(id)
 	form = AwardForm()
-
-	if form.validate_on_submit():
-		award.award_title = form.award_title.data
-		award.date = form.date.data
-		award.institution = form.institution.data
-		db.session.add(award)
-		db.session.commit()
-		flash('Your award list has been updated!')
-		return redirect(url_for('.index', award=award))
-	form.award_title.data = award.award_title
-	form.date.data = award.date
-	form.institution.data = award.institution
-	return render_template('edit_awards.html', form=form)
+	if award.student_id == current_user.id:
+		if form.validate_on_submit():
+			award.award_title = form.award_title.data
+			award.date = form.date.data
+			award.institution = form.institution.data
+			db.session.add(award)
+			db.session.commit()
+			flash('Your award list has been updated!')
+			return redirect(url_for('.index', award=award))
+		form.award_title.data = award.award_title
+		form.date.data = award.date
+		form.institution.data = award.institution
+		return render_template('edit_awards.html', form=form)
+	return render_template('404.html')
