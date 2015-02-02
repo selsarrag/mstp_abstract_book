@@ -1,10 +1,9 @@
-{#This is just a sample base.html from Flasky Tutorial#}
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}Abstract Book Maker{% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle"
@@ -37,6 +36,7 @@
 {{ moment.include_moment() }}
 {%endblock %}
 
+
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'custom_bootstrap.css') }}" />
@@ -45,6 +45,7 @@
 <link rel="icon" href="{{ url_for('static', filename = 'favicon1.ico') }}"
 	type="image/x-icon" /> 
 {% endblock %}
+
 
 {% block content %}
 <div class="container">

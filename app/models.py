@@ -11,12 +11,14 @@ class Student(UserMixin, db.Model):
 	__tablename__ = 'students'
 	id = db.Column(db.Integer, primary_key=True)
 	email = db.Column(db.String(64), unique=True, index=True)
+	bcm_id = db.Column(db.String(6), index=True)
 	studentname = db.Column(db.String(64), index=True)
-	classyear = db.Column(db.Integer, index=True) #year entered
 	grade = db.Column(db.String(4), index=True) #e.g. GS2, MS3
 	status = db.Column(db.Enum('active','on leave','graduated'), index=True) #active, on leave, alumni etc.
 	advisorname = db.Column(db.String(64), index=True)
-	department = db.Column(db.String(64), index=True)
+	advisortitle = db.Column(db.Enum('MD/Phd','PhD','MD'))
+	department_std = db.Column(db.String(64), index=True)
+	department_adv = db.Column(db.String(64), index=True)
 	last_updated = db.Column(db.DateTime)
 	abstracts = db.relationship('Abstract', backref='student', lazy='dynamic')
 	publications = db.relationship('Publication', backref='student', lazy='dynamic')
@@ -34,6 +36,7 @@ class Abstract(db.Model):
 	title = db.Column(db.String(128))
 	content = db.Column(db.Text())
 	presen_type = db.Column(db.Enum('oral','poster')) #oral vs poster
+	last_updated = db.Column(db.DateTime)
 
 	#def __repr__(self):
 	#	return '<Abstract %r>' % self.id

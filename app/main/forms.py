@@ -1,23 +1,22 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, TextAreaField, SelectField, HiddenField, IntegerField, FormField, validators
+from wtforms import StringField, SubmitField, RadioField, TextAreaField, SelectField, HiddenField, IntegerField, FormField, validators
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
 from ..models import Student, Abstract, Publication, Award
 
 class StudentForm(Form):
-	name = StringField('Full Name [First MI Last]: ')
-	classyear = StringField('Class Year: ')
-	grade = StringField('Grade (ex. MS2, GS2 etc.): ')
-	advisor = StringField('Name of your advisor [First MI Last]: ')
-	department = StringField('Department: ')
+	department_std = StringField('Department you belong to: ')
+	advisorname = StringField('Name and title of your primary advisor [First Middle(MI) Last] : ')
+	advisortitle = RadioField('Advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')])
+	department_adv = StringField('Advisor\'s primary appointment department: ')
 	submit = SubmitField('Submit')
 
 class AbstractForm(Form):
 	title = StringField('Abstract Title: ', [validators.required()])
 	eventname = HiddenField('Event: 2015 Second Look')
-	authors = TextAreaField('List of Authors [First Middle(MI) Last, First MI Last]: ', [validators.required()])
-	content = TextAreaField('Content [word count needs to be 250 or less]: ', [validators.required()])
-	presen_type = SelectField('Presentation Type:', choices=[('','Select from below'),('poster','poster'), ('oral', 'oral')])
+	authors = TextAreaField('List of Authors [First Middle(MI) Last, First MI Last] : ', [validators.required()])
+	content = TextAreaField('Content [word count needs to be 250 or less] : ', [validators.required()])
+	presen_type = SelectField('Presentation Type:', choices=[('poster','poster'), ('oral', 'oral')])
 	submit = SubmitField('Submit')
 
 	def validate_content(self, field):
@@ -28,7 +27,7 @@ class AbstractForm(Form):
 
 class PublicationForm(Form):
 	title = StringField('Publication Title: ', [validators.required()])
-	authors = TextAreaField('List of Authors [First Middle(MI) Last, First MI Last]: ', [validators.required()])
+	authors = TextAreaField('List of Authors [First Middle(MI) Last, First MI Last] : ', [validators.required()])
 	journal = StringField('Journal name: ', [validators.required()])
 	pub_year = IntegerField('Publication year: ', [validators.required()])
 	doi = StringField('DOI: ',[validators.optional()])
@@ -40,7 +39,7 @@ class PublicationListForm(Form):
 """
 class AwardForm(Form):
 	award_title = StringField('Title of award: ', [validators.required()])
-	date = StringField('Date awarded: ', [validators.required()])
+	date = StringField('Date(year) awarded: ', [validators.required()])
 	institution = StringField('Which institution/organization did you receive the award from?: ', [validators.required()])
 	submit = SubmitField('Submit')
 """

@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, current_app, abort, flash
 from flask.ext.login import login_required, current_user
 from . import main
-from .forms import StudentForm, AbstractForm, PublicationForm, AwardForm #, PublicationListForm
+from .forms import StudentForm, AbstractForm, PublicationForm, AwardForm 
 from .. import db
 from ..models import Student, Abstract, Publication, Award
 #from ..email import send_email
@@ -15,14 +15,35 @@ def index():
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
 	publications = Publication.query.filter_by(student_id = current_user.id).all()
 	awards = Award.query.filter_by(student_id = current_user.id).all()
+	student = Student.query.filter_by(id = current_user.id).first()
 
 	return render_template('index.html',
-		abstract = abstract, publications = publications, awards = awards 
+		abstract = abstract, publications = publications, awards = awards, student=student
 		#, name = session.get('name'),
 		#known = session.get('known', False),
 		#current_time=datetime.utcnow()
 		)
 
+@main.route('/profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+	student = Student.query.filter_by(id = current_user.id).first()
+	form = StudentForm()
+	if form.validate_on_submit():
+		student.advisorname = form.advisorname.data
+		student.advisortitle = form.advisortitle.data
+		student.department_adv = form.department_adv.data
+		student.department_std = form.department_std.data
+		student.last_updated = datetime.utcnow()
+		db.session.add(student)
+		db.session.commit()
+		flash('Your student profile has been updated!')
+		return redirect(url_for('.index', student=student))
+	form.advisorname.data = student.advisorname
+	form.advisortitle.data = student.advisortitle
+	form.department_std.data = student.department_std
+	form.department_adv.data = student.department_adv
+	return render_template('edit_profile.html', student=student, form=form)
 
 @main.route('/edit_abstract', methods=['GET', 'POST'])
 @login_required
@@ -37,6 +58,7 @@ def edit_abstract():
 			new_abstract.content = form.content.data
 			new_abstract.eventname = "2015 Second Look"
 			new_abstract.presen_type = form.presen_type.data
+			new_abstract.last_updated = datetime.utcnow()
 			db.session.add(new_abstract)
 			db.session.commit()
 			flash('Your abstract has been added!')
@@ -55,6 +77,7 @@ def edit_abstract():
 		abstract.content = form.content.data
 		abstract.eventname = "2015 Second Look"
 		abstract.presen_type = form.presen_type.data
+		abstract.last_updated = datetime.utcnow()
 		db.session.add(abstract)
 		db.session.commit()
 		flash('Your abstract has been updated!')
@@ -168,3 +191,22 @@ def delete_award(id):
 	db.session.commit
 	flash('Your selected award has been deleted!')
 	return redirect(url_for('.index', award=award))
+
+@main.route('/saisokumailsender', methods=['GET','POST'])
+@login_required
+def mailsender():
+	missing_profiles = Student.query.filter_by(last_updated = None).all()
+	#blank_abstracts = Abstract.query.filter_by(last_updated = '').all()
+	students = Student.query.all()
+	"""
+	dict_of_shame = dict([])
+	for x in students:
+		a = x.id
+		if Abstract.query.filter_by(student_id=a).first() == None:
+			bad_student = Student.query.filter_by(id=a).first
+			#dict_of_shame[bad_student.studentname] = "sample"
+	"""
+	return render_template('saisokumailsender.html', missing_profiles=missing_profiles, students=students)
+
+
+

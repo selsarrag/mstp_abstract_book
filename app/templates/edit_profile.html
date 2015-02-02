@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Edit Profile</h1>
+
+</div>
+<div class="col-md-6">
+	<p><strong>Name : {{ student.studentname }}</strong></p>
+	<p><strong>Year : {{ student.grade }}</strong></p>
+
+	{{ wtf.quick_form(form) }}
+{#
+<form class="form form-horizontal" method="post" role="form">
+	{{ wtf.form_field(form.advisorname) }}
+	{{ wtf.form_field(form.advisortitle) }}
+	{{ wtf.form_field(form.department) }}
+	{{ wtf.form_field(form.submit) }}
+</form>
+#}
+</div>
+{% endblock %}
