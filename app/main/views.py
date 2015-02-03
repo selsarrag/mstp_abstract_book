@@ -192,21 +192,60 @@ def delete_award(id):
 	flash('Your selected award has been deleted!')
 	return redirect(url_for('.index', award=award))
 
-@main.route('/saisokumailsender', methods=['GET','POST'])
+@main.route('/saisokumailsender', methods=['GET'])
 @login_required
 def mailsender():
 	missing_profiles = Student.query.filter_by(last_updated = None).all()
-	#blank_abstracts = Abstract.query.filter_by(last_updated = '').all()
 	students = Student.query.all()
-	"""
-	dict_of_shame = dict([])
+	#example of list comprehension
+	#slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
+	slackers = []
 	for x in students:
-		a = x.id
-		if Abstract.query.filter_by(student_id=a).first() == None:
-			bad_student = Student.query.filter_by(id=a).first
-			#dict_of_shame[bad_student.studentname] = "sample"
-	"""
-	return render_template('saisokumailsender.html', missing_profiles=missing_profiles, students=students)
+		if not Abstract.query.filter_by(student_id=x.id).first() :
+			slackers.append(x)
 
+	both = set(missing_profiles) & set(slackers)
+	missing_p = set(missing_profiles) - both
+	missing_a = set(slackers) - both
+	return render_template('saisokumailsender.html', both=both, missing_p=missing_p, missing_a=missing_a)
+
+@main.route('/saisokumailsender/abstracts', methods=['GET'])
+@login_required
+def abs_list_emails():
+	missing_profiles = Student.query.filter_by(last_updated = None).all()
+	students = Student.query.all()
+	#example of list comprehension
+	slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
+
+	both = set(missing_profiles) & set(slackers)
+	missing_p = set(missing_profiles) - both
+	missing_a = set(slackers) - both
+	return render_template('email_list_abs.html', missing_a=missing_a)
+
+@main.route('/saisokumailsender/profiles', methods=['GET'])
+@login_required
+def prof_list_emails():
+	missing_profiles = Student.query.filter_by(last_updated = None).all()
+	students = Student.query.all()
+	#example of list comprehension
+	slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
+
+	both = set(missing_profiles) & set(slackers)
+	missing_p = set(missing_profiles) - both
+	missing_a = set(slackers) - both
+	return render_template('email_list_prof.html', missing_p=missing_p)
+
+@main.route('/saisokumailsender/both', methods=['GET'])
+@login_required
+def both_list_emails():
+	missing_profiles = Student.query.filter_by(last_updated = None).all()
+	students = Student.query.all()
+	#example of list comprehension
+	slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
+
+	both = set(missing_profiles) & set(slackers)
+	missing_p = set(missing_profiles) - both
+	missing_a = set(slackers) - both
+	return render_template('email_list_both.html', both=both)
 
 

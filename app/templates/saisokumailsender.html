@@ -9,16 +9,20 @@
 
 <h2>Hall of Shame</h2>
 <div class="page header">
-<h3>Students with incomplete profile</h3>
-{% for x in missing_profiles %}
+<h3>Missing both...</h3>
+{% for x in both %}
+<p>{{ x.studentname }} : {{ x.email }}</p>
+{% endfor %}
+<a href="{{ url_for('.both_list_emails')}}"> Show Emails</a>
+<h3>Students missing just the profile</h3>
+{% for x in missing_p %}
 <p>{{  x.studentname }} : {{ x.email }}</p>
 {% endfor %}
-{#<h3>Students with missing abstracts</h3>
-{% for x in students %}
-	{% if Abstract.query.filter_by(student_id=x.id).first() == None %}
-		{{ bad_student = Student.query.filter_by(id=x.id).first() }}
-		<p>{{ bad_student.studentname }} : {{ bad_student.email }}</p>
-	{% endif %}
+<a href="{{ url_for('.prof_list_emails')}}"> Show Emails</a>
+<h3>Students missing just the abstract</h3>
+{% for x in missing_a %}
+<p>{{ x.studentname }} : {{ x.email }}</p>
 {% endfor %}
-#}
+<a href="{{ url_for('.abs_list_emails')}}"> Show Emails</a>
 {% endblock %}
+
