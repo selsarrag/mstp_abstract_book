@@ -1,19 +1,5 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-
-{% block title %}Hall of Shame{% endblock %}
-{% block head %}
-	{{ super() }}
-{% endblock %}
-{% block page_content %}
-
-<h2>Hall of Shame</h2>
-<div class="page header">
-<h3>Email list of students missing just the abstract</h3>
-<p>
 {% for x in missing_a %}
 {{ x.email }}, 
 {% endfor %}
-</p>
-{% endblock %}
+
 
