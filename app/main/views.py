@@ -215,7 +215,8 @@ def mailsender():
 	#slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
 	slackers = []
 	for x in students:
-		if not Abstract.query.filter_by(student_id=x.id).first() :
+		need_abstract = needAbstract(x.grade)
+		if need_abstract and not Abstract.query.filter_by(student_id=x.id).first() :
 			slackers.append(x)
 
 	both = set(missing_profiles) & set(slackers)
@@ -228,11 +229,15 @@ def mailsender():
 def abs_list_emails():
 	missing_profiles = Student.query.filter_by(last_updated = None).all()
 	students = Student.query.all()
+	slackers = []
+	for x in students:
+		need_abstract = needAbstract(x.grade)
+		if need_abstract and not Abstract.query.filter_by(student_id=x.id).first() :
+			slackers.append(x)
 	#example of list comprehension
-	slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
+	#slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
 
 	both = set(missing_profiles) & set(slackers)
-	missing_p = set(missing_profiles) - both
 	missing_a = set(slackers) - both
 	return render_template('email_list_abs.html', missing_a=missing_a)
 
@@ -246,7 +251,6 @@ def prof_list_emails():
 
 	both = set(missing_profiles) & set(slackers)
 	missing_p = set(missing_profiles) - both
-	missing_a = set(slackers) - both
 	return render_template('email_list_prof.html', missing_p=missing_p)
 
 @main.route('/saisokumailsender/both', methods=['GET'])
