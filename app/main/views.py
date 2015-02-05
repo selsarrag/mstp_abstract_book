@@ -7,6 +7,11 @@ from .. import db
 from ..models import Student, Abstract, Publication, Award
 #from ..email import send_email
 #from ..decorators import admin_required, permission_required
+import re
+
+def needAbstract(year, cutoff=3):
+    m = re.match(r'GS(\d+)', year)
+    return bool(m) and int(m.group(1)) >= cutoff
 
 @main.route('/', methods=['GET', 'POST']) 
 @login_required
@@ -15,10 +20,11 @@ def index():
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
 	publications = Publication.query.filter_by(student_id = current_user.id).all()
 	awards = Award.query.filter_by(student_id = current_user.id).all()
-	student = Student.query.filter_by(id = current_user.id).first()
+	student = current_user
+	need_abstract = needAbstract(student.grade)
 
 	return render_template('index.html',
-		abstract = abstract, publications = publications, awards = awards, student=student
+		abstract = abstract, publications = publications, awards = awards, student=student, need_abstract=need_abstract
 		#, name = session.get('name'),
 		#known = session.get('known', False),
 		#current_time=datetime.utcnow()
@@ -30,19 +36,27 @@ def edit_profile():
 	student = Student.query.filter_by(id = current_user.id).first()
 	form = StudentForm()
 	if form.validate_on_submit():
-		student.advisorname = form.advisorname.data
-		student.advisortitle = form.advisortitle.data
-		student.department_adv = form.department_adv.data
+		student.studenttitle = form.studenttitle.data
+		student.advisorname1 = form.advisorname1.data
+		student.advisortitle1 = form.advisortitle1.data
+		student.advisorname2 = form.advisorname2.data
+		student.advisortitle2 = form.advisortitle2.data
+		student.department_adv1 = form.department_adv1.data
+		student.department_adv2 = form.department_adv2.data
 		student.department_std = form.department_std.data
 		student.last_updated = datetime.utcnow()
 		db.session.add(student)
 		db.session.commit()
 		flash('Your student profile has been updated!')
 		return redirect(url_for('.index', student=student))
-	form.advisorname.data = student.advisorname
-	form.advisortitle.data = student.advisortitle
+	form.studenttitle.data = student.studenttitle
+	form.advisorname1.data = student.advisorname1
+	form.advisortitle1.data = student.advisortitle1
+	form.advisorname2.data = student.advisorname2
+	form.advisortitle2.data = student.advisortitle2
 	form.department_std.data = student.department_std
-	form.department_adv.data = student.department_adv
+	form.department_adv1.data = student.department_adv1
+	form.department_adv2.data = student.department_adv2
 	return render_template('edit_profile.html', student=student, form=form)
 
 @main.route('/edit_abstract', methods=['GET', 'POST'])

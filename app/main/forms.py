@@ -5,18 +5,22 @@ from wtforms import ValidationError
 from ..models import Student, Abstract, Publication, Award
 
 class StudentForm(Form):
-	department_std = StringField('Department you belong to: ')
-	advisorname = StringField('Name and title of your primary advisor [First Middle(MI) Last] : ')
-	advisortitle = RadioField('Advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')])
-	department_adv = StringField('Advisor\'s primary appointment department: ')
+	studenttitle = RadioField('Your title: ', choices=[('','N/A'),('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
+	department_std = StringField('Department you belong to: ',[validators.optional()])
+	advisorname1 = StringField('Name and title of your primary advisor [format: Jane Michelle Doe, or Jane M Doe] : ',[validators.optional()])
+	advisortitle1 = RadioField('Primary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
+	department_adv1 = StringField('Primary advisor\'s primary appointment department: ',[validators.optional()])
+	advisorname2 = StringField('Name and title of your secondary advisor [format: John Michael Doe, or John M Doe] : ', [validators.optional()])
+	advisortitle2 = RadioField('Secondary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
+	department_adv2 = StringField('Secondary advisor\'s primary appointment department: ',[validators.optional()])
 	submit = SubmitField('Submit')
 
 class AbstractForm(Form):
-	title = StringField('Abstract Title: ', [validators.required()])
+	title = StringField('*Abstract Title: ', [validators.required()])
 	eventname = HiddenField('Event: 2015 Second Look')
-	authors = TextAreaField('List of Authors [First Middle(MI) Last, First MI Last] : ', [validators.required()])
-	content = TextAreaField('Content [word count needs to be 250 or less] : ', [validators.required()])
-	presen_type = SelectField('Presentation Type:', choices=[('poster','poster'), ('oral', 'oral')])
+	authors = TextAreaField('*List of Authors [format: Janie Doe, Johnnie M Doe, etc...] : ', [validators.required()])
+	content = TextAreaField('*Content [word count needs to be 250 or less] : ', [validators.required()])
+	presen_type = SelectField('*Presentation Type:', choices=[('poster','poster'), ('oral', 'oral')])
 	submit = SubmitField('Submit')
 
 	def validate_content(self, field):
@@ -26,11 +30,11 @@ class AbstractForm(Form):
 			raise ValidationError('Abstract cannot be more than 250 words. You currently have %d words.' % count)
 
 class PublicationForm(Form):
-	title = StringField('Publication Title: ', [validators.required()])
-	authors = TextAreaField('List of Authors [First Middle(MI) Last, First MI Last] : ', [validators.required()])
-	journal = StringField('Journal name: ', [validators.required()])
-	pub_year = IntegerField('Publication year: ', [validators.required()])
-	doi = StringField('DOI: ',[validators.optional()])
+	title = StringField('*Publication Title: ', [validators.required()])
+	authors = TextAreaField('*List of Authors [format: Janie Doe, Johnnie M Doe, etc...] : ', [validators.required()])
+	journal = StringField('*Journal name: ', [validators.required()])
+	pub_year = IntegerField('*Publication year: ', [validators.required()])
+	doi = StringField('DOI(optional): ',[validators.optional()])
 	submit = SubmitField('Submit')
 
 """
@@ -38,9 +42,9 @@ class PublicationListForm(Form):
 	pub1 = FormField(PublicationForm)
 """
 class AwardForm(Form):
-	award_title = StringField('Title of award: ', [validators.required()])
-	date = StringField('Date(year) awarded: ', [validators.required()])
-	institution = StringField('Which institution/organization did you receive the award from?: ', [validators.required()])
+	award_title = StringField('*Title of award: ', [validators.required()])
+	date = StringField('*Date(year) awarded: ', [validators.required()])
+	institution = StringField('*Which institution/organization did you receive the award from?: ', [validators.required()])
 	submit = SubmitField('Submit')
 """
 

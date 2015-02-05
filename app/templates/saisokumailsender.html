@@ -11,17 +11,17 @@
 <div class="page header">
 <h3>Missing both...</h3>
 {% for x in both %}
-<p>{{ x.studentname }} : {{ x.email }}</p>
+<p>{{ x.firstname }}&nbsp;{{ x.lastname }} : {{ x.email }}</p>
 {% endfor %}
 <a href="{{ url_for('.both_list_emails')}}"> Show Emails</a>
 <h3>Students missing just the profile</h3>
 {% for x in missing_p %}
-<p>{{  x.studentname }} : {{ x.email }}</p>
+<p>{ x.firstname }}&nbsp;{{ x.lastname }} : {{ x.email }}</p>
 {% endfor %}
 <a href="{{ url_for('.prof_list_emails')}}"> Show Emails</a>
 <h3>Students missing just the abstract</h3>
 {% for x in missing_a %}
-<p>{{ x.studentname }} : {{ x.email }}</p>
+<p>{ x.firstname }}&nbsp;{{ x.lastname }} : {{ x.email }}</p>
 {% endfor %}
 <a href="{{ url_for('.abs_list_emails')}}"> Show Emails</a>
 {% endblock %}

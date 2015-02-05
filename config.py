@@ -15,7 +15,14 @@ class DevelopmentConfig(Config):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
 		'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
+class ProductionConfig(Config):
+	DEBUG = True
+	SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or \
+		'mysql://abstract_book:mstp_abstractbook@localhost/abstract_info'
+
+
 config = {
 	'development': DevelopmentConfig,
+	'production': ProductionConfig,
 	'default' : DevelopmentConfig
 }

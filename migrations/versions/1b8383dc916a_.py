@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: 1ef4e8c0bd06
+Revision ID: 1b8383dc916a
 Revises: None
-Create Date: 2015-02-01 19:28:12.759783
+Create Date: 2015-02-05 01:17:03.331021
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '1ef4e8c0bd06'
+revision = '1b8383dc916a'
 down_revision = None
 
 from alembic import op
@@ -20,24 +20,31 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=64), nullable=True),
     sa.Column('bcm_id', sa.String(length=6), nullable=True),
-    sa.Column('studentname', sa.String(length=64), nullable=True),
+    sa.Column('firstname', sa.String(length=32), nullable=True),
+    sa.Column('lastname', sa.String(length=32), nullable=True),
+    sa.Column('studenttitle', sa.String(length=10), nullable=True),
     sa.Column('grade', sa.String(length=4), nullable=True),
-    sa.Column('status', sa.Enum('active', 'on leave', 'graduated'), nullable=True),
-    sa.Column('advisorname', sa.String(length=64), nullable=True),
-    sa.Column('advisortitle', sa.Enum('MD/Phd', 'PhD', 'MD'), nullable=True),
+    sa.Column('advisorname1', sa.String(length=64), nullable=True),
+    sa.Column('advisortitle1', sa.String(length=10), nullable=True),
+    sa.Column('advisorname2', sa.String(length=64), nullable=True),
+    sa.Column('advisortitle2', sa.String(length=10), nullable=True),
     sa.Column('department_std', sa.String(length=64), nullable=True),
-    sa.Column('department_adv', sa.String(length=64), nullable=True),
+    sa.Column('department_adv1', sa.String(length=64), nullable=True),
+    sa.Column('department_adv2', sa.String(length=64), nullable=True),
     sa.Column('last_updated', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_students_advisorname'), 'students', ['advisorname'], unique=False)
+    op.create_index(op.f('ix_students_advisorname1'), 'students', ['advisorname1'], unique=False)
+    op.create_index(op.f('ix_students_advisorname2'), 'students', ['advisorname2'], unique=False)
     op.create_index(op.f('ix_students_bcm_id'), 'students', ['bcm_id'], unique=False)
-    op.create_index(op.f('ix_students_department_adv'), 'students', ['department_adv'], unique=False)
+    op.create_index(op.f('ix_students_department_adv1'), 'students', ['department_adv1'], unique=False)
+    op.create_index(op.f('ix_students_department_adv2'), 'students', ['department_adv2'], unique=False)
     op.create_index(op.f('ix_students_department_std'), 'students', ['department_std'], unique=False)
     op.create_index(op.f('ix_students_email'), 'students', ['email'], unique=True)
+    op.create_index(op.f('ix_students_firstname'), 'students', ['firstname'], unique=False)
     op.create_index(op.f('ix_students_grade'), 'students', ['grade'], unique=False)
-    op.create_index(op.f('ix_students_status'), 'students', ['status'], unique=False)
-    op.create_index(op.f('ix_students_studentname'), 'students', ['studentname'], unique=False)
+    op.create_index(op.f('ix_students_lastname'), 'students', ['lastname'], unique=False)
+    op.create_index(op.f('ix_students_studenttitle'), 'students', ['studenttitle'], unique=False)
     op.create_table('abstracts',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('student_id', sa.Integer(), nullable=True),
@@ -45,7 +52,7 @@ def upgrade():
     sa.Column('authors', sa.Text(), nullable=True),
     sa.Column('title', sa.String(length=128), nullable=True),
     sa.Column('content', sa.Text(), nullable=True),
-    sa.Column('presen_type', sa.Enum('oral', 'poster'), nullable=True),
+    sa.Column('presen_type', sa.String(length=10), nullable=True),
     sa.Column('last_updated', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['student_id'], ['students.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -55,18 +62,18 @@ def upgrade():
     sa.Column('student_id', sa.Integer(), nullable=True),
     sa.Column('authors', sa.Text(), nullable=True),
     sa.Column('title', sa.String(length=128), nullable=True),
-    sa.Column('doi', sa.String(), nullable=True),
+    sa.Column('doi', sa.String(length=32), nullable=True),
     sa.Column('journal', sa.String(length=128), nullable=True),
-    sa.Column('pub_year', sa.Integer(), nullable=True),
+    sa.Column('pub_year', sa.String(length=32), nullable=True),
     sa.ForeignKeyConstraint(['student_id'], ['students.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('awards',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('student_id', sa.Integer(), nullable=True),
-    sa.Column('award_title', sa.String(), nullable=True),
-    sa.Column('date', sa.String(), nullable=True),
-    sa.Column('institution', sa.String(), nullable=True),
+    sa.Column('award_title', sa.String(length=128), nullable=True),
+    sa.Column('date', sa.String(length=32), nullable=True),
+    sa.Column('institution', sa.String(length=64), nullable=True),
     sa.ForeignKeyConstraint(['student_id'], ['students.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -78,13 +85,16 @@ def downgrade():
     op.drop_table('awards')
     op.drop_table('publications')
     op.drop_table('abstracts')
-    op.drop_index(op.f('ix_students_studentname'), table_name='students')
-    op.drop_index(op.f('ix_students_status'), table_name='students')
+    op.drop_index(op.f('ix_students_studenttitle'), table_name='students')
+    op.drop_index(op.f('ix_students_lastname'), table_name='students')
     op.drop_index(op.f('ix_students_grade'), table_name='students')
+    op.drop_index(op.f('ix_students_firstname'), table_name='students')
     op.drop_index(op.f('ix_students_email'), table_name='students')
     op.drop_index(op.f('ix_students_department_std'), table_name='students')
-    op.drop_index(op.f('ix_students_department_adv'), table_name='students')
+    op.drop_index(op.f('ix_students_department_adv2'), table_name='students')
+    op.drop_index(op.f('ix_students_department_adv1'), table_name='students')
     op.drop_index(op.f('ix_students_bcm_id'), table_name='students')
-    op.drop_index(op.f('ix_students_advisorname'), table_name='students')
+    op.drop_index(op.f('ix_students_advisorname2'), table_name='students')
+    op.drop_index(op.f('ix_students_advisorname1'), table_name='students')
     op.drop_table('students')
     ### end Alembic commands ###

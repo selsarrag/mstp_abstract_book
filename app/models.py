@@ -12,13 +12,17 @@ class Student(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	email = db.Column(db.String(64), unique=True, index=True)
 	bcm_id = db.Column(db.String(6), index=True)
-	studentname = db.Column(db.String(64), index=True)
+	firstname = db.Column(db.String(32), index=True)
+	lastname = db.Column(db.String(32), index=True)
+	studenttitle = db.Column(db.String(10), index=True)
 	grade = db.Column(db.String(4), index=True) #e.g. GS2, MS3
-	status = db.Column(db.Enum('active','on leave','graduated'), index=True) #active, on leave, alumni etc.
-	advisorname = db.Column(db.String(64), index=True)
-	advisortitle = db.Column(db.Enum('MD/Phd','PhD','MD'))
+	advisorname1 = db.Column(db.String(64), index=True)
+	advisortitle1 = db.Column(db.String(10)) #, ('MD/Phd','PhD','MD'))
+	advisorname2 = db.Column(db.String(64), index=True)
+	advisortitle2 = db.Column(db.String(10))
 	department_std = db.Column(db.String(64), index=True)
-	department_adv = db.Column(db.String(64), index=True)
+	department_adv1 = db.Column(db.String(64), index=True)
+	department_adv2 = db.Column(db.String(64), index=True)
 	last_updated = db.Column(db.DateTime)
 	abstracts = db.relationship('Abstract', backref='student', lazy='dynamic')
 	publications = db.relationship('Publication', backref='student', lazy='dynamic')
@@ -35,7 +39,7 @@ class Abstract(db.Model):
 	authors = db.Column(db.Text())
 	title = db.Column(db.String(128))
 	content = db.Column(db.Text())
-	presen_type = db.Column(db.Enum('oral','poster')) #oral vs poster
+	presen_type = db.Column(db.String(10)) #oral vs poster
 	last_updated = db.Column(db.DateTime)
 
 	#def __repr__(self):
@@ -47,17 +51,17 @@ class Publication(db.Model):
 	student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
 	authors = db.Column(db.Text())
 	title = db.Column(db.String(128))
-	doi = db.Column(db.String())
+	doi = db.Column(db.String(32))
 	journal = db.Column(db.String(128))
-	pub_year = db.Column(db.Integer)
+	pub_year = db.Column(db.String(32))
 
 class Award(db.Model):
 	__tablename__ = 'awards'
 	id = db.Column(db.Integer, primary_key=True)
 	student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
-	award_title = db.Column(db.String())
-	date = db.Column(db.String())
-	institution = db.Column(db.String())
+	award_title = db.Column(db.String(128))
+	date = db.Column(db.String(32))
+	institution = db.Column(db.String(64))
 
 
 
