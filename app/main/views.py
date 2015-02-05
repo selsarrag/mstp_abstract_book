@@ -7,6 +7,11 @@ from .. import db
 from ..models import Student, Abstract, Publication, Award
 #from ..email import send_email
 #from ..decorators import admin_required, permission_required
+import re
+
+def needAbstract(year, cutoff=3):
+    m = re.match(r'GS(\d+)', year)
+    return bool(m) and int(m.group(1)) >= cutoff
 
 @main.route('/', methods=['GET', 'POST']) 
 @login_required
@@ -15,10 +20,11 @@ def index():
 	abstract = Abstract.query.filter_by(student_id = current_user.id).first()
 	publications = Publication.query.filter_by(student_id = current_user.id).all()
 	awards = Award.query.filter_by(student_id = current_user.id).all()
-	student = Student.query.filter_by(id = current_user.id).first()
+	student = current_user
+	need_abstract = needAbstract(student.grade)
 
 	return render_template('index.html',
-		abstract = abstract, publications = publications, awards = awards, student=student
+		abstract = abstract, publications = publications, awards = awards, student=student, need_abstract=need_abstract
 		#, name = session.get('name'),
 		#known = session.get('known', False),
 		#current_time=datetime.utcnow()

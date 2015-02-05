@@ -5,14 +5,14 @@ from wtforms import ValidationError
 from ..models import Student, Abstract, Publication, Award
 
 class StudentForm(Form):
-	studenttitle = RadioField('Your title: ', choices=[('','N/A'),('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')])
-	department_std = StringField('Department you belong to: ')
-	advisorname1 = StringField('Name and title of your primary advisor [format: Jane Michelle Doe, or Jane M Doe] : ')
-	advisortitle1 = RadioField('Primary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')])
-	department_adv1 = StringField('Primary advisor\'s primary appointment department: ')
-	advisorname2 = StringField('Name and title of your secondary advisor [format: John Michael Doe, or John M Doe] : ')
-	advisortitle2 = RadioField('Secondary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')])
-	department_adv2 = StringField('Secondary advisor\'s primary appointment department: ')
+	studenttitle = RadioField('Your title: ', choices=[('','N/A'),('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
+	department_std = StringField('Department you belong to: ',[validators.optional()])
+	advisorname1 = StringField('Name and title of your primary advisor [format: Jane Michelle Doe, or Jane M Doe] : ',[validators.optional()])
+	advisortitle1 = RadioField('Primary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
+	department_adv1 = StringField('Primary advisor\'s primary appointment department: ',[validators.optional()])
+	advisorname2 = StringField('Name and title of your secondary advisor [format: John Michael Doe, or John M Doe] : ', [validators.optional()])
+	advisortitle2 = RadioField('Secondary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
+	department_adv2 = StringField('Secondary advisor\'s primary appointment department: ',[validators.optional()])
 	submit = SubmitField('Submit')
 
 class AbstractForm(Form):
@@ -42,9 +42,9 @@ class PublicationListForm(Form):
 	pub1 = FormField(PublicationForm)
 """
 class AwardForm(Form):
-	award_title = StringField('Title of award: ', [validators.required()])
-	date = StringField('Date(year) awarded: ', [validators.required()])
-	institution = StringField('Which institution/organization did you receive the award from?: ', [validators.required()])
+	award_title = StringField('*Title of award: ', [validators.required()])
+	date = StringField('*Date(year) awarded: ', [validators.required()])
+	institution = StringField('*Which institution/organization did you receive the award from?: ', [validators.required()])
 	submit = SubmitField('Submit')
 """
 

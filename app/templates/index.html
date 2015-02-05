@@ -10,7 +10,7 @@
 	<h2>Overview</h2>
 	<div class="page header">
 	<h3>Student Info  <a class="btn btn-default" href="{{ url_for('.edit_profile')}}"> Edit Student Info</a></h3>
-	<p>Name : {{ student.firstname }}&nbsp;{{ student.lastname }}{% if student.studenttitle %}&nbsp;,{{ student.studenttitle }}{% endif %}</p>
+	<p>Name : {{ student.firstname }}&nbsp;{{ student.lastname }}{% if student.studenttitle %},&nbsp;{{ student.studenttitle }}{% endif %}</p>
 	<p>Year : {{ student.grade }}</p>
 	{% if student.department_std %}
 	<p>Department: {{ student.department_std }}</p>
@@ -20,12 +20,12 @@
 	{% if student.advisorname1 %}
 	<p>Primary advisor : {{ student.advisorname1 }}, {{ student.advisortitle1 }}</p>
 	{% else %}
-	<p>Primary advisor: Please edit your profile and fill-in.</p>
+	<p>Primary advisor: Please edit your profile and fill-in if applicable.</p>
 	{% endif %}
 	{% if student.department_adv1 %}
 	<p>Primary advisor's department: {{ student.department_adv1 }}</p>
 	{% else %}
-	<p>Primary advisor's department: Please edit your profile and fill-in</p>
+	<p>Primary advisor's department: Please edit your profile and fill-in if applicable.</p>
 	{% endif %}
 	{% if student.advisorname2 %}
 	<p>Secondary advisor : {{ student.advisorname2 }}, {{ student.advisortitle2 }}</p>
@@ -35,6 +35,12 @@
 	<p>Student Info was last updated {{ moment(student.last_updated).format("dddd, MMMM Do YYYY, h:mm:ss a") }}.
 	{% endif %}
 	<h3>Abstract  <a class="btn btn-default" href="{{ url_for('.edit_abstract')}}"> Edit Abstract Info</a></h3>
+	{% if need_abstract and not abstract %}
+	<h4>Abstract REQUIRED</h4>
+	{% endif %}
+	{% if not need_abstract %}
+	<p>Abstract submission is optional for you.</p>
+	{% endif %}
 	{% if abstract %}
 	<p>Title: {{ abstract.title }}</p>
 	<p>List of Authors: {{ abstract.authors }}</p>
