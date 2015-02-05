@@ -7,13 +7,13 @@ from ..models import Student, Abstract, Publication, Award
 class StudentForm(Form):
 	studenttitle = RadioField('Your title: ', choices=[('','N/A'),('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
 	department_std = StringField('Department you belong to: ',[validators.optional()])
-	advisorname1 = StringField('Name and title of your primary advisor [format: Jane Michelle Doe, or Jane M Doe] : ',[validators.optional()])
+	advisorname1 = StringField('Name and title of your primary advisor </br>[format: Jane Michelle Doe, or Jane M Doe] : ',[validators.optional()])
 	advisortitle1 = RadioField('Primary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
 	department_adv1 = StringField('Primary advisor\'s primary appointment department: ',[validators.optional()])
-	advisorname2 = StringField('Name and title of your secondary advisor [format: John Michael Doe, or John M Doe] : ', [validators.optional()])
+	advisorname2 = StringField('Name and title of your secondary advisor </br>[format: John Michael Doe, or John M Doe] : ', [validators.optional()])
 	advisortitle2 = RadioField('Secondary advisor\'s title: ', choices=[('MD/PhD','MD/PhD'),('PhD','PhD'),('MD','MD')], validators=[validators.optional()])
 	department_adv2 = StringField('Secondary advisor\'s primary appointment department: ',[validators.optional()])
-	submit = SubmitField('Submit')
+	submit = SubmitField('Confirm your profile')
 
 class AbstractForm(Form):
 	title = StringField('*Abstract Title: ', [validators.required()])
@@ -37,44 +37,8 @@ class PublicationForm(Form):
 	doi = StringField('DOI(optional): ',[validators.optional()])
 	submit = SubmitField('Submit')
 
-"""
-class PublicationListForm(Form):
-	pub1 = FormField(PublicationForm)
-"""
 class AwardForm(Form):
 	award_title = StringField('*Title of award: ', [validators.required()])
 	date = StringField('*Date(year) awarded: ', [validators.required()])
 	institution = StringField('*Which institution/organization did you receive the award from?: ', [validators.required()])
 	submit = SubmitField('Submit')
-"""
-
-class EditProfileAdminForm(Form):
-	email = StringField('Email', validators=[Required(), Length(1,64),
-											 Email()])
-	username = StringField('Username', validators=[Required(), Length(1,64),
-							Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-									'Usernames must have only letters, '
-									'numbers, dots or underscores')])
-	confirmed = BooleanField('Confirmed')
-	role = SelectField('Role', coerce=int) #coerce=int stores field values as integers 
-	name = StringField('Real name', validators=[Length(0,64)])
-	location = StringField('Location', validators=[Length(0,64)])
-	about_me = TextAreaField('About me')
-	submit = SubmitField('Submit')
-
-	def __init__(self, user, *args, **kwargs):
-		super(EditProfileAdminForm, self).__init__(*args, **kwargs)
-		self.role.choices = [(role.id, role.name)
-							 for role in Role.query.order_by(Role.name).all()]
-		self.user = user 
-
-	def validate_email(self, field):
-		if field.data != self.user.email and \
-				User.query.filter_by(email=field.data).first():
-			raise ValidationError('Email already registered.')
-
-	def validate_username(self, field):
-		if field.data != self.user.username and \
-				User.query.filter_by(username=field.data).first():
-			raise ValidationError('Username already in use')
-"""
