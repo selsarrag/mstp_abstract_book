@@ -10,22 +10,26 @@
 	<h2>Overview</h2>
 	<div class="page header">
 	<h3>Student Info  <a class="btn btn-default" href="{{ url_for('.edit_profile')}}"> Edit Student Info</a></h3>
-	<p>Name : {{ student.studentname }}</p>
+	<p>Name : {{ student.firstname }}&nbsp;{{ student.lastname }}{% if student.studenttitle %}&nbsp;,{{ student.studenttitle }}{% endif %}</p>
 	<p>Year : {{ student.grade }}</p>
 	{% if student.department_std %}
 	<p>Department: {{ student.department_std }}</p>
 	{% else %}
 	<p>Department: Please edit your profile and fill-in</p>
 	{% endif %}
-	{% if student.advisorname %}
-	<p>Primary Advisor : {{ student.advisorname }}, {{ student.advisortitle }}</p>
+	{% if student.advisorname1 %}
+	<p>Primary advisor : {{ student.advisorname1 }}, {{ student.advisortitle1 }}</p>
 	{% else %}
-	<p>Primary Advisor: Please edit your profile and fill-in.</p>
+	<p>Primary advisor: Please edit your profile and fill-in.</p>
 	{% endif %}
-	{% if student.department_adv %}
-	<p>Advisor's Department: {{ student.department_adv }}</p>
+	{% if student.department_adv1 %}
+	<p>Primary advisor's department: {{ student.department_adv1 }}</p>
 	{% else %}
-	<p>Advisor's Department: Please edit your profile and fill-in</p>
+	<p>Primary advisor's department: Please edit your profile and fill-in</p>
+	{% endif %}
+	{% if student.advisorname2 %}
+	<p>Secondary advisor : {{ student.advisorname2 }}, {{ student.advisortitle2 }}</p>
+	<p>Secondary advisor's department: {{ student.department_adv2 }}</p>
 	{% endif %}
 	{% if student.last_updated %}
 	<p>Student Info was last updated {{ moment(student.last_updated).format("dddd, MMMM Do YYYY, h:mm:ss a") }}.
