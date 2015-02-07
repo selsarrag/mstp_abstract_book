@@ -10,16 +10,22 @@
 </div>
 <div class="col-md-6">
 	<p><strong>Name : {{ student.firstname }}&nbsp;{{ student.lastname }}</strong></p>
-	<p><strong>Year : {{ student.grade }}</strong></p>
+	
+	<form method="post" role="form">
+		{{ form.csrf_token }}	
+		{{ form.studenttitle.label }} {{ wtf.form_field(form.studenttitle) }}
+		<p><strong>Year : {{ student.grade }}</strong></p>
+	    {{ wtf.form_field(form.department_std) }}
+		{{ wtf.form_field(form.advisorname1) }}
+		{{ form.advisortitle1.label }}
+		{{ wtf.form_field(form.advisortitle1) }}
+		{{ wtf.form_field(form.department_adv1) }}
+		{{ wtf.form_field(form.advisorname2) }}
+		{{ form.advisortitle2.label }}
+		{{ wtf.form_field(form.advisortitle2) }}
+		{{ wtf.form_field(form.department_adv2) }}
+		{{ wtf.form_field(form.submit) }}
+	</form>
 
-	{{ wtf.quick_form(form) }}
-{#
-<form class="form form-horizontal" method="post" role="form">
-	{{ wtf.form_field(form.advisorname) }}
-	{{ wtf.form_field(form.advisortitle) }}
-	{{ wtf.form_field(form.department) }}
-	{{ wtf.form_field(form.submit) }}
-</form>
-#}
 </div>
 {% endblock %}

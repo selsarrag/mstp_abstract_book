@@ -4,6 +4,7 @@
 {% block title %}Overview{% endblock %}
 {% block head %}
 	{{ super() }}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'index.css') }}" />
 {% endblock %}
 {% block page_content %}
 
@@ -36,7 +37,7 @@
 	{% endif %}
 	<h3>Abstract  <a class="btn btn-default" href="{{ url_for('.edit_abstract')}}"> Edit Abstract Info</a></h3>
 	{% if need_abstract and not abstract %}
-	<h4>Abstract REQUIRED</h4>
+	<h4 id="alert">Abstract REQUIRED</h4>
 	{% endif %}
 	{% if not need_abstract %}
 	<p>Abstract submission is optional for you.</p>
@@ -48,7 +49,7 @@
 	<p>Presentation Type: {{ abstract.presen_type }}</p>
 	{% endif %}
 	{% if abstract.last_updated %}
-	<p>Abstract section was last updated {{ moment(abstract.last_updated).format("dddd, MMMM Do YYYY, h:mm:ss a") }}.
+	<p>Abstract was last updated {{ moment(abstract.last_updated).format("dddd, MMMM Do YYYY, h:mm:ss a") }}.
 	{% endif %}
 	<h3>Publications  <a class="btn btn-default" href="{{ url_for('.add_publication') }}"> + add publication</a></h3>
 	{% for publication in publications %}
@@ -79,5 +80,4 @@
 		<p>Journal: {{ award.institution }}</p>
 	{% endfor %}
 	</div>
-
 {% endblock %}
