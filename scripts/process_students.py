@@ -61,7 +61,7 @@ def load_students(filename):
 	    info['bcm_id'] = x[2]
             info['year'] = x[3]
             info['department'] = x[4]
-            if not x[4]:
+            if not x[5]:
                 info['advisor'] = None
             else:
                 info['advisor'] = [processName(a) for a in x[5].split('/')]
