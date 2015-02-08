@@ -1,0 +1,10 @@
+Dear {{ student.firstname }},
+Welcome to Abstract Book Maker 2015. 
+It's the time of the year again to submit your
+updated profile and abstract for the upcoming MSTP symposium!
+
+Please login at {{ url_for('main.index') }} using the below email address:
+{{ student.email }}
+
+Sincerely,
+Admin for the abstract book maker

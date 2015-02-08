@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from . import auth
 from .. import db
 from ..models import Student 
-#from ..email import send_email
+from ..email import send_email
 from .forms import LoginForm #, RegistrationForm, PasswordUpdateForm
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -25,5 +25,12 @@ def logout():
 	flash('You have been logged out.')
 	return redirect(url_for('auth.login'))
 
-
+@auth.route('/intro_email')
+@login_required
+def send_introduction():
+	everyone = Student.query.all()
+	for x in everyone:
+		send_email(x.email,'Sign in and add your profile and abstract', 
+					'mail/login_info',student=x)
+	return redirect(url_for('main.index'))
 
