@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Admin Area{% endblock %}
+{% block head %}
+	{{ super() }}
+{% endblock %}
+{% block page_content %}
+<h3>Intro/Login Guide Email</h3>
+<p>The button below sends emails with a link to this app to all students on the database</p>
+<a href="{{ url_for('auth.send_introduction') }}"><button>SEND</button></a>
+<h3>Email Missile</h3>
+<p>Click <a href="{{ url_for('main.mailsender') }}">HERE</a> to view list of students that need reminders to update</p>
+<p>The button below sends emails to ALL students in the Hall of Shame</p>
+
+{% endblock %}

@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
 	SECRET_KEY = os.environ.get('SECRET_KEY') or 'mahotest'
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-	QUICKABSTRACT_MAIL_SUBJECT_PREFIX = '[Abstract Book 2015]'
+	QUICKABSTRACT_MAIL_SUBJECT_PREFIX = '[MSTP Second Look] '
 	QUICKABSTRACT_MAIL_SENDER = 'Abstract book admin <msasaki.a@gmail.com>'
 	#FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
 

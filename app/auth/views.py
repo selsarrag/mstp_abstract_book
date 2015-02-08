@@ -25,12 +25,13 @@ def logout():
 	flash('You have been logged out.')
 	return redirect(url_for('auth.login'))
 
-@auth.route('/intro_email')
+@auth.route('/doshaburidemokamawanaito')
 @login_required
 def send_introduction():
 	everyone = Student.query.all()
 	for x in everyone:
 		send_email(x.email,'Sign in and add your profile and abstract', 
 					'mail/login_info',student=x)
-	return redirect(url_for('main.index'))
+	flash('Emails have been sent to all students')
+	return redirect(url_for('main.admin_area_view'))
 
