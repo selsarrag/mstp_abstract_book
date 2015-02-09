@@ -239,6 +239,7 @@ def abs_list_emails():
 	for x in missing_a:
 		send_email(x.email,'Submit your abstract', 
 						'mail/saisoku_abstract',student=x)
+		email_list.append(x.email)
 	message = "Emails have been sent to the following students missing their abstract: %s" % email_list
 	flash(message)
 	return redirect(url_for('.admin_area_view', missing_a=missing_a))
@@ -276,4 +277,26 @@ def admin_area_view():
 	return render_template('himitsunoadminarea.html')
 
 
-
+@main.route('/zubunuredemokamawanaito')
+@login_required
+def send_mass_missile():
+	slacker_filter()
+	both = slacker_filter()[0]
+	missing_p = slacker_filter()[1]
+	missing_a = slacker_filter()[2]
+	email_list=[]
+	for x in both:
+		send_email(x.email,'Submit your abstract and confirm profile', 
+						'mail/saisoku_both',student=x)
+		email_list.append(x.email)
+	for x in missing_a:
+		send_email(x.email,'Submit your abstract', 
+						'mail/saisoku_abstract',student=x)
+		email_list.append(x.email)
+	for x in missing_p:
+		send_email(x.email,'Confirm your profile', 
+						'mail/saisoku_profile',student=x)
+		email_list.append(x.email)
+	message = "Reminder emails have been sent out in mass to the following students: %s" % email_list
+	flash(message)
+	return redirect(url_for('main.admin_area_view'))

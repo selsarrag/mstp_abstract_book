@@ -10,7 +10,7 @@
 <p>The button below sends emails with a link to this app to all students on the database</p>
 <a href="{{ url_for('auth.send_introduction') }}"><button>SEND</button></a>
 <h3>Email Missile</h3>
-<p>Click <a href="{{ url_for('main.mailsender') }}">HERE</a> to view list of students that need reminders to update</p>
+<p>Click <a href="{{ url_for('main.mailsender') }}">HERE</a> to view list of students that need reminders and to separately send emails.</p>
 <p>The button below sends emails to ALL students in the Hall of Shame</p>
-
+<a href="{{ url_for('main.send_mass_missile') }}"><button>SEND MASS REMINDER</button></a>
 {% endblock %}

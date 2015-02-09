@@ -35,3 +35,7 @@ def send_introduction():
 	flash('Emails have been sent to all students')
 	return redirect(url_for('main.admin_area_view'))
 
+
+
+
+
