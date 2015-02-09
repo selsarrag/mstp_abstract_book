@@ -11,7 +11,8 @@ class Student(UserMixin, db.Model):
 	__tablename__ = 'students'
 	id = db.Column(db.Integer, primary_key=True)
 	email = db.Column(db.String(64), unique=True, index=True)
-	bcm_id = db.Column(db.String(6), index=True)
+	bcm_email = db.Column(db.String(32), unique=True, index=True)
+	bcm_id = db.Column(db.String(6), unique=True, index=True)
 	firstname = db.Column(db.String(32), index=True)
 	lastname = db.Column(db.String(32), index=True)
 	studenttitle = db.Column(db.String(10), index=True)

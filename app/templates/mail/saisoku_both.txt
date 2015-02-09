@@ -1,0 +1,11 @@
+Dear {{ student.firstname }} {{ student.lastname }},
+
+	This is a friendly reminder for you to submit your abstract AND confirm profile. 
+	Due date is __________
+	Hurry!
+	
+	Please login from http://abstract.ewalkerlab.com using your
+	BCM email address and student ID, and submit your abstract and confirm your profile!
+	
+	Sincerely,
+	MSTP Abstract Book Team
