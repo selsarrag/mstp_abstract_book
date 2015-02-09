@@ -1,11 +1,11 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, current_app, abort, flash
+from flask import render_template, session, redirect, url_for, current_app, abort, flash, Markup
 from flask.ext.login import login_required, current_user
 from . import main
 from .forms import StudentForm, AbstractForm, PublicationForm, AwardForm 
 from .. import db
 from ..models import Student, Abstract, Publication, Award
-#from ..email import send_email
+from ..email import send_email
 #from ..decorators import admin_required, permission_required
 import re
 
@@ -206,9 +206,7 @@ def delete_award(id):
 	flash('Your selected award has been deleted!')
 	return redirect(url_for('.index', award=award))
 
-@main.route('/saisokumailsender', methods=['GET'])
-@login_required
-def mailsender():
+def slacker_filter():
 	missing_profiles = Student.query.filter_by(last_updated = None).all()
 	students = Student.query.all()
 	#example of list comprehension
@@ -222,57 +220,83 @@ def mailsender():
 	both = set(missing_profiles) & set(slackers)
 	missing_p = set(missing_profiles) - both
 	missing_a = set(slackers) - both
+	return both, missing_p, missing_a	
+
+@main.route('/saisokumailsender', methods=['GET'])
+@login_required
+def mailsender():
+	#filter_result = slacker_filter()
+	both = slacker_filter()[0]
+	missing_p = slacker_filter()[1]
+	missing_a = slacker_filter()[2]
 	return render_template('saisokumailsender.html', both=both, missing_p=missing_p, missing_a=missing_a)
 
 @main.route('/saisokumailsender/abstracts', methods=['GET'])
 @login_required
 def abs_list_emails():
-	missing_profiles = Student.query.filter_by(last_updated = None).all()
-	students = Student.query.all()
-	slackers = []
-	for x in students:
-		need_abstract = needAbstract(x.grade)
-		if need_abstract and not Abstract.query.filter_by(student_id=x.id).first() :
-			slackers.append(x)
-	#example of list comprehension
-	#slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
-
-	both = set(missing_profiles) & set(slackers)
-	missing_a = set(slackers) - both
-	return render_template('email_list_abs.html', missing_a=missing_a)
+	missing_a = slacker_filter()[2]
+	email_list=[]
+	for x in missing_a:
+		send_email(x.email,'Submit your abstract', 
+						'mail/saisoku_abstract',student=x)
+		email_list.append(x.email)
+	message = "Emails have been sent to the following students missing their abstract: %s" % email_list
+	flash(message)
+	return redirect(url_for('.admin_area_view', missing_a=missing_a))
 
 @main.route('/saisokumailsender/profiles', methods=['GET'])
 @login_required
 def prof_list_emails():
-	missing_profiles = Student.query.filter_by(last_updated = None).all()
-	students = Student.query.all()
-	slackers = []
-	for x in students:
-		need_abstract = needAbstract(x.grade)
-		if need_abstract and not Abstract.query.filter_by(student_id=x.id).first() :
-			slackers.append(x)
-	#example of list comprehension
-	#slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
-
-	both = set(missing_profiles) & set(slackers)
-	missing_p = set(missing_profiles) - both
-	return render_template('email_list_prof.html', missing_p=missing_p)
+	missing_p = slacker_filter()[1]
+	email_list=[]
+	for x in missing_p:
+		send_email(x.email,'Confirm your profile', 
+						'mail/saisoku_profile',student=x)
+		email_list.append(x.email)
+	message = "Emails have been sent to the following students missing their profile: %s" % email_list
+	flash(message)
+	return redirect(url_for('.admin_area_view', missing_p=missing_p))
 
 @main.route('/saisokumailsender/both', methods=['GET'])
 @login_required
 def both_list_emails():
-	missing_profiles = Student.query.filter_by(last_updated = None).all()
-	students = Student.query.all()
-	slackers = []
-	for x in students:
-		need_abstract = needAbstract(x.grade)
-		if need_abstract and not Abstract.query.filter_by(student_id=x.id).first() :
-			slackers.append(x)
-	#example of list comprehension
-	#slackers = [x for x in students if Abstract.query.filter_by(student_id=x.id).count() == 0]
-
-	both = set(missing_profiles) & set(slackers)
-
-	return render_template('email_list_both.html', both=both)
+	both = slacker_filter()[0]
+	email_list=[]
+	for x in both:
+		send_email(x.email,'Submit your abstract and confirm profile', 
+						'mail/saisoku_both',student=x)
+		email_list.append(x.email)
+	message =  "Emails have been sent to the following students missing both fields: %s" % email_list
+	flash(message)
+	return redirect(url_for('.admin_area_view', both=both))
 
 
+@main.route('/himitsunoadminarea')
+@login_required
+def admin_area_view():
+	return render_template('himitsunoadminarea.html')
+
+
+@main.route('/zubunuredemokamawanaito')
+@login_required
+def send_mass_missile():
+	slacker_filter()
+	both = slacker_filter()[0]
+	missing_p = slacker_filter()[1]
+	missing_a = slacker_filter()[2]
+	email_list=[]
+	for x in both:
+		send_email(x.email,'Submit your abstract and confirm profile', 
+						'mail/saisoku_both',student=x)
+		email_list.append(x.email)
+	for x in missing_a:
+		send_email(x.email,'Submit your abstract', 
+						'mail/saisoku_abstract',student=x)
+		email_list.append(x.email)
+	for x in missing_p:
+		send_email(x.email,'Confirm your profile', 
+						'mail/saisoku_profile',student=x)
+		email_list.append(x.email)
+	message = "Reminder emails have been sent out in mass to the following students: %s" % email_list
+	flash(message)
+	return redirect(url_for('main.admin_area_view'))

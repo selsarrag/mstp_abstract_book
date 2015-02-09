@@ -1,0 +1,10 @@
+Dear {{ student.firstname }},
+	This is a friendly reminder for you to submit your abstract. 
+	Due date is __________
+	Hurry!
+	
+	Please login at http://abstract.ewalkerlab.com using the following email address
+	{{ student.email }} and submit your abstract!
+
+	Sincerely,
+	MSTP Abstract Book Team

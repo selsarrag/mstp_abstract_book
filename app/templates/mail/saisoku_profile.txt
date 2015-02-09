@@ -1,0 +1,11 @@
+Dear {{ student.firstname }},
+
+	This is a friendly reminder for you to confirm your profile. 
+	Due date is __________
+	Hurry!
+
+	Please login from http://abstract.ewalkerlab.com using the following email address
+	{{ student.email }} and confirm your profile!
+
+	Sincerely,
+	MSTP Abstract Book Team
