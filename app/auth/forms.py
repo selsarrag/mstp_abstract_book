@@ -6,7 +6,8 @@ from wtforms.validators import Required, Email, Length #, Regexp, EqualTo
 #from ..models import User
 
 class LoginForm(Form):
-	email = StringField('Email', validators=[Required(), Length(1,64),
+	bcm_email = StringField('BCM Email: ', validators=[Required(), Length(1,64),
 											Email()])
+	bcm_id = StringField('BCM ID: ', validators=[Required(), Length(1,6)])
 	remember_me = BooleanField('Keep me logged in')
 	submit = SubmitField('Log In')

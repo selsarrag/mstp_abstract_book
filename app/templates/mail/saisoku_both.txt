@@ -4,8 +4,8 @@ Dear {{ student.firstname }},
 	Due date is __________
 	Hurry!
 	
-	Please login from http://abstract.ewalkerlab.com using the following email address
-	{{ student.email }} and submit your abstract and confirm your profile!
+	Please login from http://abstract.ewalkerlab.com using your
+	BCM email address and student ID, and submit your abstract and confirm your profile!
 	
 	Sincerely,
 	MSTP Abstract Book Team

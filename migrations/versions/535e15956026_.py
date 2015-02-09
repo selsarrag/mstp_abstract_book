@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: 1b8383dc916a
+Revision ID: 535e15956026
 Revises: None
-Create Date: 2015-02-05 01:17:03.331021
+Create Date: 2015-02-08 21:23:20.223483
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '1b8383dc916a'
+revision = '535e15956026'
 down_revision = None
 
 from alembic import op
@@ -19,6 +19,7 @@ def upgrade():
     op.create_table('students',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=64), nullable=True),
+    sa.Column('bcm_email', sa.String(length=32), nullable=True),
     sa.Column('bcm_id', sa.String(length=6), nullable=True),
     sa.Column('firstname', sa.String(length=32), nullable=True),
     sa.Column('lastname', sa.String(length=32), nullable=True),
@@ -36,6 +37,7 @@ def upgrade():
     )
     op.create_index(op.f('ix_students_advisorname1'), 'students', ['advisorname1'], unique=False)
     op.create_index(op.f('ix_students_advisorname2'), 'students', ['advisorname2'], unique=False)
+    op.create_index(op.f('ix_students_bcm_email'), 'students', ['bcm_email'], unique=True)
     op.create_index(op.f('ix_students_bcm_id'), 'students', ['bcm_id'], unique=False)
     op.create_index(op.f('ix_students_department_adv1'), 'students', ['department_adv1'], unique=False)
     op.create_index(op.f('ix_students_department_adv2'), 'students', ['department_adv2'], unique=False)
@@ -94,6 +96,7 @@ def downgrade():
     op.drop_index(op.f('ix_students_department_adv2'), table_name='students')
     op.drop_index(op.f('ix_students_department_adv1'), table_name='students')
     op.drop_index(op.f('ix_students_bcm_id'), table_name='students')
+    op.drop_index(op.f('ix_students_bcm_email'), table_name='students')
     op.drop_index(op.f('ix_students_advisorname2'), table_name='students')
     op.drop_index(op.f('ix_students_advisorname1'), table_name='students')
     op.drop_table('students')

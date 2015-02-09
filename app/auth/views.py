@@ -10,12 +10,13 @@ from .forms import LoginForm #, RegistrationForm, PasswordUpdateForm
 def login():
 	form = LoginForm()
 	if form.validate_on_submit():
-		user = Student.query.filter_by(email=form.email.data).first()
-		if user is not None: #and user.verify_email(form.email.data):
+		user_by_email = Student.query.filter_by(bcm_email=form.bcm_email.data).first()
+		user_by_id = Student.query.filter_by(bcm_id=form.bcm_id.data).first()
+		if user_by_email is not None and user_by_id is not None and user_by_email == user_by_id:
+			user = Student.query.filter_by(bcm_email=form.bcm_email.data).first()
 			login_user(user, form.remember_me.data)
 			return redirect(url_for('main.index'))
-			#return redirect(request.args.get('next') or url_for('main.index'))
-		flash('Invalid user email.')
+		flash('Invalid email address or student ID.')
 	return render_template('/auth/login.html', form=form, current_user=current_user)
 
 @auth.route('/logout')
