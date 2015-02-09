@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, current_app, abort, flash
+from flask import render_template, session, redirect, url_for, current_app, abort, flash, Markup
 from flask.ext.login import login_required, current_user
 from . import main
 from .forms import StudentForm, AbstractForm, PublicationForm, AwardForm 
@@ -235,37 +235,45 @@ def mailsender():
 @login_required
 def abs_list_emails():
 	missing_a = slacker_filter()[2]
+	email_list=[]
 	for x in missing_a:
 		send_email(x.email,'Submit your abstract', 
 						'mail/saisoku_abstract',student=x)
-	flash('Emails have been sent to the following students missing their abstract')
-	return render_template('email_list_abs.html', missing_a=missing_a)
+	message = "Emails have been sent to the following students missing their abstract: %s" % email_list
+	flash(message)
+	return redirect(url_for('.admin_area_view', missing_a=missing_a))
 
 @main.route('/saisokumailsender/profiles', methods=['GET'])
 @login_required
 def prof_list_emails():
 	missing_p = slacker_filter()[1]
+	email_list=[]
 	for x in missing_p:
 		send_email(x.email,'Confirm your profile', 
 						'mail/saisoku_profile',student=x)
-	flash('Emails have been sent to the following students missing their profile')
-	return render_template('email_list_prof.html', missing_p=missing_p)
+		email_list.append(x.email)
+	message = "Emails have been sent to the following students missing their profile: %s" % email_list
+	flash(message)
+	return redirect(url_for('.admin_area_view', missing_p=missing_p))
 
 @main.route('/saisokumailsender/both', methods=['GET'])
 @login_required
 def both_list_emails():
 	both = slacker_filter()[0]
+	email_list=[]
 	for x in both:
 		send_email(x.email,'Submit your abstract and confirm profile', 
 						'mail/saisoku_both',student=x)
-	flash('Emails have been sent to the following students missing both fields')
-	return render_template('email_list_both.html', both=both)
+		email_list.append(x.email)
+	message =  "Emails have been sent to the following students missing both fields: %s" % email_list
+	flash(message)
+	return redirect(url_for('.admin_area_view', both=both))
+
 
 @main.route('/himitsunoadminarea')
 @login_required
 def admin_area_view():
 	return render_template('himitsunoadminarea.html')
-
 
 
 
