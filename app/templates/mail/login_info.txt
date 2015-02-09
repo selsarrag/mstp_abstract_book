@@ -1,9 +1,12 @@
-Dear {{ student.firstname }} {{ student.lastname }},
-Welcome to Abstract Book Maker 2015. 
-It's the time of the year again to submit your
-updated profile and abstract for the upcoming MSTP symposium!
 
-Please login at http://abstract.ewalkerlab.com using your BCM email and student ID.
+Dear {{ student.firstname }} {{ student.lastname }},
+
+Hi, this is MSTP Abstract Book Team.
+Yes, it's the time of the year again to submit your updated profile and abstract for the upcoming MSTP second look event!
+Please visit http://abstract.ewalkerlab.com and login using your BCM email and student ID.
+Make sure to update and confirm your profile, submit abstract if required, and update any awards and publications!
+
+If you encounter any problem or have any question about the webpage, please contact Edgar Walker at edgar.walker@gmail.com.
 
 Sincerely,
-Admin for the abstract book maker
+MSTP Abstract Book Team
