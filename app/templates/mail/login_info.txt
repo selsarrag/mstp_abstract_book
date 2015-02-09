@@ -3,8 +3,7 @@ Welcome to Abstract Book Maker 2015.
 It's the time of the year again to submit your
 updated profile and abstract for the upcoming MSTP symposium!
 
-Please login at http://abstract.ewalkerlab.com using the following email address:
-{{ student.email }}
+Please login at http://abstract.ewalkerlab.com using your BCM email and student ID.
 
 Sincerely,
 Admin for the abstract book maker
