@@ -1,4 +1,4 @@
-Dear {{ student.firstname }},
+Dear {{ student.firstname }} {{ student.lastname }},
 
 	This is a friendly reminder for you to submit your abstract AND confirm profile. 
 	Due date is __________

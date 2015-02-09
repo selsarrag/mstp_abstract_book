@@ -16,14 +16,19 @@
 		{{ form.studenttitle.label }} {{ wtf.form_field(form.studenttitle) }}
 		<p><strong>Year : {{ student.grade }}</strong></p>
 	    {{ wtf.form_field(form.department_std) }}
+	    {{ wtf.form_field(form.department_other_std) }}
+	    <p>--------------------------------------------------------------------------------------------</p>
 		{{ wtf.form_field(form.advisorname1) }}
 		{{ form.advisortitle1.label }}
 		{{ wtf.form_field(form.advisortitle1) }}
 		{{ wtf.form_field(form.department_adv1) }}
+		{{ wtf.form_field(form.department_other_adv1) }}
+		<p>--------------------------------------------------------------------------------------------</p>
 		{{ wtf.form_field(form.advisorname2) }}
 		{{ form.advisortitle2.label }}
 		{{ wtf.form_field(form.advisortitle2) }}
 		{{ wtf.form_field(form.department_adv2) }}
+		{{ wtf.form_field(form.department_other_adv2) }}
 		{{ wtf.form_field(form.submit) }}
 	</form>
 

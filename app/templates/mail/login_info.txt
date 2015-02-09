@@ -1,4 +1,4 @@
-Dear {{ student.firstname }},
+Dear {{ student.firstname }} {{ student.lastname }},
 Welcome to Abstract Book Maker 2015. 
 It's the time of the year again to submit your
 updated profile and abstract for the upcoming MSTP symposium!

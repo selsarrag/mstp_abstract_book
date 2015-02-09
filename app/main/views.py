@@ -37,13 +37,25 @@ def edit_profile():
 	form = StudentForm()
 	if form.validate_on_submit():
 		student.studenttitle = form.studenttitle.data
+		if form.department_std.data == 'Other':
+			student.department_std = form.department_other_std.data
+		else:
+			student.department_std = form.department_std.data
+
 		student.advisorname1 = form.advisorname1.data
 		student.advisortitle1 = form.advisortitle1.data
+		if form.department_adv1.data == 'Other':
+			student.department_adv1 = form.department_other_adv1.data
+		else:
+			student.department_adv1 = form.department_adv1.data
+		
 		student.advisorname2 = form.advisorname2.data
 		student.advisortitle2 = form.advisortitle2.data
-		student.department_adv1 = form.department_adv1.data
-		student.department_adv2 = form.department_adv2.data
-		student.department_std = form.department_std.data
+		if form.department_adv2.data == 'Other':
+			student.department_adv2 = form.department_other_adv2.data
+		else:
+			student.department_adv2 = form.department_adv2.data
+		
 		student.last_updated = datetime.utcnow()
 		db.session.add(student)
 		db.session.commit()
@@ -56,7 +68,14 @@ def edit_profile():
 	form.advisortitle2.data = student.advisortitle2
 	form.department_std.data = student.department_std
 	form.department_adv1.data = student.department_adv1
-	form.department_adv2.data = student.department_adv2
+	
+
+	choices = [x[0] for x in form.department_adv2.choices]
+	if student.department_adv2 in choices:
+		form.department_adv2.data = student.department_adv2
+	else:
+		form.department_adv2.data = 'Other' 
+		form.department_other_adv2.data = student.department_adv2
 	return render_template('edit_profile.html', student=student, form=form)
 
 @main.route('/edit_abstract', methods=['GET', 'POST'])
