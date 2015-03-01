@@ -77,7 +77,7 @@
 		if (window.confirm('Are you sure you want to delete this award?')){location.href = "{{ url_for('.delete_award', id=award.id) }}" }
 		</script></p>
 		<p>Date Received: {{ award.date }}</p>
-		<p>Journal: {{ award.institution }}</p>
+		<p>Institution: {{ award.institution }}</p>
 	{% endfor %}
 	</div>
 	<p>If you have any issues or concerns, please contact Edgar at <a href="mailto:edgar.walker@gmail.com">edgar.walker@gmail.com</a> for support.</p>

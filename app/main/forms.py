@@ -42,6 +42,6 @@ class PublicationForm(Form):
 
 class AwardForm(Form):
 	award_title = StringField('*Title of award: ', [validators.required()])
-	date = StringField('*Date(year) awarded: ', [validators.required()])
+	date = StringField('*Date awarded (month, year): ', [validators.required()])
 	institution = StringField('*Which institution/organization did you receive the award from?: ', [validators.required()])
 	submit = SubmitField('Submit')
